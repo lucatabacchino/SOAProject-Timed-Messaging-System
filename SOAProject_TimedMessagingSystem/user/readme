@@ -1,0 +1,28 @@
+All the testing programs must be run after sudoing.
+
+
+The program writer.c receives 2 params in input:
+1) a pathname of the device file handled by device driver
+2) a write timeout expressed in seconds
+Writer can insert message that will be posted in device file after the write timeout specified. 
+With the messages:
+-REVOKE_DELAYED_MESSAGES: the delayed messages are revoked 
+-CLOSE: close the file descriptor and exit. The delayed messages are revoked.
+
+
+The program reader.c receives 2 parameters:
+1) a pathname of the device file handled by device driver
+2) a read timeout expessed in seconds
+Reader can read messages posted in the device file by writer. 
+
+
+The program readerAndWriterConcurrency.c receives 4 parameters:
+1) pathname of the device file handled by device driver
+2) major number that allows to create the device file
+3) write timeout expressed in seconds
+4) read timeout expessed in seconds
+This program create the device file with function mknod(), set send and receive timeout and create reader and writer threads. 
+The reader thread, in an infinite loop try to read the messages posted by writers.
+The writer thread posted a message in which he writes its id.
+In default configurations we have 20 writers and 5 readers. 
+The read timeout must be greater than write timeout. If write timeout is greater than read timeout, the two values are switched.
